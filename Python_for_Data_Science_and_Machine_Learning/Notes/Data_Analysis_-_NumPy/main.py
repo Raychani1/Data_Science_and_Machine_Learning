@@ -1,0 +1,83 @@
+import numpy as np
+
+
+if __name__ == '__main__':
+    # Cast a Python list to NumPy Array ( One dimensional NumPy Array - Vector )
+    my_list = [1, 2, 3]
+
+    arr = np.array(my_list)
+
+    # Cast a Python list of lists to NumPy Array
+    # ( Two dimensional NumPy Array - Matrix )
+    my_mat = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+    mat = np.array(my_mat)
+
+    # Easy way to create a NumPy Array with the range of values
+    # ( Up to but not including )
+
+    my_range = np.arange(start=0, stop=11, step=2)
+
+    # Generate zeros / ones
+    # ( Single digit - Vector / Tuple of numbers ( Rows, Columns ) - Matrix )
+
+    ones = np.ones(shape=(6, 5))
+    zeros = np.zeros(shape=(6, 5))
+
+    # np.linspace returns evenly spaced numbers over a specified interval
+    # in a Vector ( 1D array )
+
+    lin = np.linspace(start=0, stop=5, num=100)
+
+    # Using the np.eye method we can create an Identity Matrix
+    # Identity Matrix is a Matrix which has only ones on the main diagonal
+    # and zeros anywhere else.
+
+    eye = np.eye(N=9)
+
+    # Random Numbers
+
+    # Using the np.random.rand() we can create an array of a given shape
+    # and populate it with random numbers from the Uniform distribution
+    # over 0 to 1
+
+    rand1 = np.random.rand(9)  # 1D
+    rand2 = np.random.rand(9, 9)  # 2D
+
+    # If we want to return a sample ( or many samples ) from the Standard
+    # Normal ( Gaussian ) distribution we can use np.random.randn()
+
+    randn = np.random.randn(9, 9)
+
+    # To return random integers from a low to a high number
+    # ( up to but not including ) we can use the np.random.randint() method
+
+    randint = np.random.randint(low=0, high=100, size=(5, 5))
+
+    arr2 = np.arange(25)
+    ranarr = np.random.randint(0, 50, 10)
+
+    # The .reshape() method will return an array with the same data but in a
+    # different shape.
+
+    # Quick check Number of rows x Number of Columns = Number of Elements
+
+    arr2 = arr2.reshape(5, 5)
+
+    # Finding the min/max value of an array using the min/max method
+    ranarr.max()
+
+    # Find the index of min/max value of an array using the argmin/argmax method
+    print(f'Randint Array: {ranarr}\n'
+          f'Min: {ranarr.min()}\n'
+          f'Max: {ranarr.max()}\n'
+          f'Index of Min: {ranarr.argmin()}\n'
+          f'Index of Max: {ranarr.argmax()}')
+
+    # The shape attribute will return the shape of an array
+    print(ranarr.shape)
+
+    # The dtype attribute returns the datatype stored in the array
+    print(ranarr.dtype)
+
+
