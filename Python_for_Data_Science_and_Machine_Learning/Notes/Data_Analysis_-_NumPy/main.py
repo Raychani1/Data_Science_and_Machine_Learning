@@ -1,6 +1,5 @@
 import numpy as np
 
-
 if __name__ == '__main__':
     # Cast a Python list to NumPy Array ( One dimensional NumPy Array - Vector )
     my_list = [1, 2, 3]
@@ -80,4 +79,55 @@ if __name__ == '__main__':
     # The dtype attribute returns the datatype stored in the array
     print(ranarr.dtype)
 
+    # Indexing and Selection
 
+    arr3 = np.arange(0, 11)
+
+    # From index 0 up to but not including 5
+    print(arr3[:5])
+
+    # From index 5 to the end
+    print(arr3[5:])
+
+    # Broadcasting - Assign a value to a subset of an array
+    arr3[:5] = 100
+
+    print(arr3)
+
+    # Changes the original array
+    slice_of_arr3 = arr3[:6]
+    slice_of_arr3[:] = 99
+
+    print(slice_of_arr3)
+
+    # The copy method creates a copy of an array so it is not changed in the
+    # process
+    array_copy = arr3.copy()
+    array_copy[:] = 50
+
+    print(f'\nOriginal array {arr3}\nCopy of array {array_copy}\n')
+
+    arr_2d = np.array(
+        [
+            [5, 10, 15],
+            [20, 25, 30],
+            [35, 40, 45]
+        ]
+    )
+
+    # Double bracket notation
+    print(arr_2d[0][0])
+
+    # Comma notation
+    print(arr_2d[0, 2])
+
+    # 2D array slicing
+    print(arr_2d[1:, :])
+
+    # Conditional selection
+
+    new_array = np.arange(1, 11)
+
+    bool_array = new_array[new_array > 5]
+
+    print(bool_array)
