@@ -1,19 +1,25 @@
 #!/bin/zsh
 
-# Color definitions
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+WORK_DIR=$(pwd)
+
+source "$WORK_DIR/Shell/colors.sh"
+
+MAX_ARGS=4
+
 
 if [ "$#" -lt 1 ]
   then
-    echo -e "${GREEN}Missing argument! Please enter project directory you want to run!\n${NC}"
+    exec "$WORK_DIR/Shell/help.sh"
     else
-      if [ "$#" -gt 1 ]
+      if [ "$#" -gt "$MAX_ARGS" ]
         then
           echo -e "${GREEN}Too many arguments! Please enter project directory you want to run!\n${NC}"
 
           else
-
+            if [ "$1" = "--help" ]
+              then
+                exec "$WORK_DIR/Shell/help.sh" "$@"
+            fi
             clear
 
             cd "$1" || { return 127; }
@@ -31,7 +37,7 @@ if [ "$#" -lt 1 ]
             echo -e "${GREEN}Downloading required packages\n${NC}"
             python "../../setup.py" "$1"
 
-            gnome-terminal --tab -- sh -c 'python main.py; zsh'
+            gnome-terminal --tab -- sh -c "python main.py; $SHELL"
 
             echo -e "${GREEN}Removing Virtual Environment\n${NC}"
             rm -rf venv
