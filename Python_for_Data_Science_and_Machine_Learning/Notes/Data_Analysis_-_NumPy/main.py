@@ -193,6 +193,5 @@ if __name__ == '__main__':
     # Pass every element to Logarithm
     # If you pass an Array with 0 in it, the method will return -Inf and
     # RuntimeWarning
-    
-    print(np.log(arr))
 
+    print(np.log(arr))
