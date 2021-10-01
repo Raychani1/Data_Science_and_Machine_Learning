@@ -131,3 +131,68 @@ if __name__ == '__main__':
     bool_array = new_array[new_array > 5]
 
     print(bool_array)
+
+    # Operations
+
+    arr4 = np.arange(1, 11)
+
+    print(arr4 + arr4)
+
+    print(arr4 - arr4)
+
+    print(arr4 * arr4)
+
+    print(arr4 ** arr4)
+
+    # Scalers are the numbers after the operation sign which should be
+    # broadcasted on a given array
+
+    print(arr4 + 100)
+
+    print(arr4 - 100)
+
+    print(arr4 * 100)
+
+    print(arr4 ** 3)
+
+    # If you have an operation which results in division by zero
+    # NumPy won't throw an error it will put show a warning and put:
+    # NaN if the operation was 0 / 0
+    # Inf if the operation was any number / 0
+
+    arr5 = np.arange(10)
+
+    print(arr5/arr5)
+
+    print(arr4/arr5)
+
+    # Universal Array Functions
+
+    # Get the square root of every element in the NumPy Array
+
+    print(np.sqrt(arr5))
+
+    # Calculate the exponential value of every element in the NumPy Array
+
+    print(np.exp(arr4))
+
+    # Get the min/max value from NumPy Array
+    # ( The same as .min()/.max() )
+
+    print(np.min(arr4))
+    print(np.max(arr4))
+
+    # Pass every element to Sine
+
+    print(np.sin(arr))
+
+    # Pass every element to Cosine
+
+    print(np.cos(arr))
+
+    # Pass every element to Logarithm
+    # If you pass an Array with 0 in it, the method will return -Inf and
+    # RuntimeWarning
+    
+    print(np.log(arr))
+
