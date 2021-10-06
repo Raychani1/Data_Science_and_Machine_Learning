@@ -99,3 +99,41 @@ new_ind = 'CA NY WY OR CO'.split()
 df['State'] = new_ind
 
 df.set_index('State')
+
+
+# Multi-Level Index
+
+# Index levels
+outside = ['G1', 'G1', 'G1', 'G2', 'G2', 'G2']
+inside = [1, 2, 3, 1, 2, 3]
+
+# list(zip(outside, inside)) command makes list of tuple pairs
+# from the two lists
+hier_index = list(zip(outside, inside))
+
+# Create a Multi Index from a list of tuples
+hier_index = pd.MultiIndex.from_tuples(hier_index)
+
+df = pd.DataFrame(
+    data=randn(6, 2),
+    index=hier_index,
+    columns=['A', 'B']
+)
+
+# Calling data from Multi Index DataFrame
+
+print(df.loc['G1'].loc[1])
+
+df.index.names = ['Groups', 'Num']
+
+print(df)
+
+print(df.loc['G2'].loc[2]['B'])
+print(df.loc['G1'].loc[3]['A'])
+
+
+# Cross Section can be used when we have a Multi-Level Index
+
+# Specify which value you need, and which lever to search in.
+
+print(df.xs(1, level='Num'))
