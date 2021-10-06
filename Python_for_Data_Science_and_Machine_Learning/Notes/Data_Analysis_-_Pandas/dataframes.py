@@ -54,3 +54,48 @@ print(df.iloc[0])
 # Selecting subset of rows and columns
 print(df.loc['B', 'Y'])
 print(df.loc[['A', 'B'], ['W', 'Y']])
+
+# Conditional selection
+booldf = df > 0
+
+# Contains NaN where the condition is False
+print(df[booldf])
+
+# If you specify the column no NaN values will be present
+# Returns DataFrame with rows where the condition is True
+print(df[df['W'] > 0])
+
+print(df[df['Z'] < 0])
+
+# Select the specific column(s) from the sub set of a DataFrame
+print(df[df['W'] > 0]['X'])
+
+print(df[df['W'] > 0][['X', 'Y']])
+
+# Multiple Conditional Select
+
+# You have to use the & / | symbols instead of and / or operators
+# Because you get a Series of those values instead of two values
+print(df[(df['W'] > 0) & (df['Y'] > 1)])
+
+# Index
+
+# Resetting index
+
+# The reset_index() method will reset the index to numerical index, and the
+# previous index will be saved as a separate column called index.
+# This is by default not in place.
+
+df.reset_index()
+
+
+# Setting to something else
+
+# The set_index() method will set the index to a specified column values.
+# This is by default not in place.
+
+new_ind = 'CA NY WY OR CO'.split()
+
+df['State'] = new_ind
+
+df.set_index('State')
