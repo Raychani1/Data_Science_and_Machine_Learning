@@ -88,7 +88,6 @@ print(df[(df['W'] > 0) & (df['Y'] > 1)])
 
 df.reset_index()
 
-
 # Setting to something else
 
 # The set_index() method will set the index to a specified column values.
@@ -99,7 +98,6 @@ new_ind = 'CA NY WY OR CO'.split()
 df['State'] = new_ind
 
 df.set_index('State')
-
 
 # Multi-Level Index
 
@@ -131,9 +129,38 @@ print(df)
 print(df.loc['G2'].loc[2]['B'])
 print(df.loc['G1'].loc[3]['A'])
 
-
 # Cross Section can be used when we have a Multi-Level Index
 
 # Specify which value you need, and which lever to search in.
 
 print(df.xs(1, level='Num'))
+
+# Missing Data
+
+# Dropping Missing Data
+
+# We can inport DataFrame from a dictionary where keys will be column names
+d = {
+    'A': [1, 2, np.nan],
+    'B': [5, np.nan, np.nan],
+    'C': [1, 2, 3]
+}
+
+df = pd.DataFrame(d)
+
+# Every row/column with a single or more NaN value will be dropped.
+# The row or column can be specified by the axis variable.
+# This is by default not in place.
+# With the thresh ( stands for threshold ) you can specify how many NaN values
+# you want to keep.
+
+df.dropna(axis=0)
+
+# Replacing Missing Data
+
+# The missing values can be filled using the fillna method.
+
+df.fillna(value='Fill Value')
+
+# Common strategy is to fill the missing value with the mean value of the column
+df['A'].fillna(value=df['A'].mean())
