@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -6,6 +5,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from tensorflow.keras.models import load_model
 
 # Read the (fake) data to DataFrame
 df = pd.read_csv('data/fake_reg.csv')
@@ -14,7 +15,7 @@ df = pd.read_csv('data/fake_reg.csv')
 # Based on the plot we can see that 'feature 2' has very high correlation
 # with the actual 'price'.
 sns.pairplot(df)
-# plt.show()
+plt.show()
 
 # Grab the features ( based on which we will predict )
 
@@ -100,3 +101,76 @@ loss_df = pd.DataFrame(data=model.history.history)
 
 loss_df.plot()
 plt.show()
+
+# We can evaluate how well our Network does on data based on the metrics we've
+# chosen ( in our case Mean Squared Error - MSE )
+model.evaluate(x=X_train, y=y_train)
+model.evaluate(x=X_test, y=y_test)
+
+# To truly evaluate our models performance is through prediction.
+test_predictions = model.predict(x=X_test)
+
+# We can compare our prediction and the true values
+test_predictions = pd.Series(test_predictions.reshape(300, ))
+pred_df = pd.DataFrame(data=y_test, columns=['True Test Y'])
+pred_df = pd.concat([pred_df, test_predictions], axis=1)
+pred_df.columns = ['True Test Y', 'Model Predictions']
+
+# If the prediction was 100% accurate we would have a perfect straight line
+sns.scatterplot(data=pred_df, x='True Test Y', y='Model Predictions')
+plt.show()
+
+# Display some error metrics
+print('Mean absolute error:')
+print(
+    mean_absolute_error(
+        y_true=pred_df['True Test Y'],
+        y_pred=pred_df['Model Predictions']
+    )
+)
+
+print('Mean squared error:')
+print(
+    mean_squared_error(
+        y_true=pred_df['True Test Y'],
+        y_pred=pred_df['Model Predictions']
+    )
+)
+
+print('Root mean squared error:')
+print(
+    mean_squared_error(
+        y_true=pred_df['True Test Y'],
+        y_pred=pred_df['Model Predictions']
+    ) ** 0.5
+)
+
+# Predict on brand new data
+
+# Pick new values
+new_gem = [[998, 1000]]
+
+# Scale those values
+new_gem = scaler.transform(new_gem)
+
+# Predict based on new values
+model.predict(new_gem)
+
+print(model.predict(new_gem))
+
+# You can also save the model for later
+# Commented out so it does not overwrite our good model
+# model.save('my_gem_model.h5')
+
+# Load model from save file
+later_model = load_model('my_gem_model.h5')
+
+# Test our save model once again
+
+brand_new_gem = [[420, 690]]
+
+# Scale those values
+brand_new_gem = scaler.transform(brand_new_gem)
+
+# Predict based on new values
+print(later_model.predict(brand_new_gem))
