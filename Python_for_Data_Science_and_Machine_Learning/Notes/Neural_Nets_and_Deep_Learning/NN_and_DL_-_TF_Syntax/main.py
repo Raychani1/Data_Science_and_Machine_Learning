@@ -7,7 +7,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
-
 # Read the (fake) data to DataFrame
 df = pd.read_csv('data/fake_reg.csv')
 
@@ -60,3 +59,44 @@ scaler.fit(X_train)
 # our train set and our test set.
 X_train = scaler.transform(X_train)
 X_test = scaler.transform(X_test)
+
+# To build a very simple model in Keras we need a base Sequential model and
+# add layers to it.
+# In this example we are using a Sequential model with Dense layer.
+# Dense layers are used to create simple Feed forward densely connected
+# ( every neuron is connected with every neuron in the next layer ).
+
+# There are two methods of defining a Network
+
+# Method 1
+# model = Sequential([
+#     Dense(units=4, activation='relu'),
+#     Dense(units=4, activation='relu'),
+#     Dense(units=4, activation='relu'),
+#     Dense(units=1)
+# ])
+
+# Method 2
+# This one is better if we want to edit the model in the future and turn off
+# some layers.
+model = Sequential()
+model.add(Dense(units=4, activation='relu'))
+model.add(Dense(units=4, activation='relu'))
+model.add(Dense(units=4, activation='relu'))
+model.add(Dense(units=1))
+
+# We define the optimizer, which function we want to use for the gradient
+# descent ( when we are looking for the weights, which produce the minimal
+# loss ). The loss parameter will represent the loss function and it will
+# depend on the given task.
+model.compile(optimizer='rmsprop', loss='mse')
+
+# Once the model is created we can fit it to the training set.
+model.fit(x=X_train, y=y_train, epochs=250)
+
+# The model.history.history returns the historical loss values. We can plot that
+# out.
+loss_df = pd.DataFrame(data=model.history.history)
+
+loss_df.plot()
+plt.show()
