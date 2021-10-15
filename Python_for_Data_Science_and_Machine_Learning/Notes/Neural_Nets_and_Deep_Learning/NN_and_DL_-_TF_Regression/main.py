@@ -90,3 +90,44 @@ plt.show()
 # have higher value
 sns.boxplot(data=df, x='waterfront', y='price')
 plt.show()
+
+# We can remove unnecessary column(s), for example 'id'
+df.drop('id', axis=1, inplace=True)
+
+# We can also convert the date which is currently a String to a DateTime Object
+# which will allow us execute further feature engineering
+df['date'] = pd.to_datetime(df['date'])
+
+df['year'] = df['date'].apply(lambda date: date.year)
+df['month'] = df['date'].apply(lambda date: date.month)
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df, x='month', y='price')
+plt.show()
+
+# We can check if there's some kind of connection between sales and months/years
+df.groupby('month').mean()['price'].plot()
+plt.show()
+
+df.groupby('year').mean()['price'].plot()
+plt.show()
+
+df.drop('date', axis=1, inplace=True)
+
+# We can check the numerical value Zip Code
+print(df['zipcode'].value_counts())
+
+# Since there are 70 categories we will not create dummy variables from it, and
+# because the lack of domain experience we will drop this column
+df.drop('zipcode', axis=1, inplace=True)
+
+# We can check the year renovated column
+# In other cases we could feature engineer this feature to two categories
+# 'Renovated' and 'Not Renovated', but since the not renovated houses have the
+# value 0 we don't really need to do this step, because the higher the value in
+# this column the higher the probability that it will have higher price
+print(df['yr_renovated'].value_counts())
+
+# The same situation as with the Year of Renovation, values are ascending,
+# if there is no basement, then the value will be 0
+print(df['sqft_basement'].value_counts())
