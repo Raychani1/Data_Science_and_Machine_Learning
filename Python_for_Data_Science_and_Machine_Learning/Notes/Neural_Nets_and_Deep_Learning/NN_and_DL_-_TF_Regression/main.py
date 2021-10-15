@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-# from sklearn.preprocessing import MinMaxScaler
-# from sklearn.model_selection import train_test_split
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.layers import Dense
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
 # from sklearn.metrics import mean_absolute_error, mean_squared_error
 # from tensorflow.keras.models import load_model
 
@@ -131,3 +131,46 @@ print(df['yr_renovated'].value_counts())
 # The same situation as with the Year of Renovation, values are ascending,
 # if there is no basement, then the value will be 0
 print(df['sqft_basement'].value_counts())
+
+# Separate the Label and the features
+X = df.drop('price', axis=1).values
+y = df['price'].values
+
+# Split the data for train and test
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=101
+)
+
+# Next we scale our data
+scaler = MinMaxScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Create the model
+model = Sequential()
+
+# Most of the time we want to have the number of neurons based on the number of
+# features we have
+print(X_train.shape)  # We have 19 features
+
+# Hidden layers
+model.add(Dense(19, activation='relu'))
+model.add(Dense(19, activation='relu'))
+model.add(Dense(19, activation='relu'))
+model.add(Dense(19, activation='relu'))
+
+# Output layer
+model.add(Dense(1))
+
+# We select the Adam optimizer with a loss function for regression problems
+model.compile(optimizer='adam', loss='mse')
+
+# The smaller the batch size the longer is the training
+model.fit(
+    x=X_train,
+    y=y_train,
+    validation_data=(X_test, y_test),
+    batch_size=128,
+    epochs=400
+)
