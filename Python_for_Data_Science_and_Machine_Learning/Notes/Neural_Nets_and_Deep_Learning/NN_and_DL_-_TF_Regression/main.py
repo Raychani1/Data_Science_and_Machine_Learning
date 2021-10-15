@@ -52,3 +52,41 @@ plt.show()
 plt.figure(figsize=(10, 6))
 sns.boxplot(x='bedrooms', y='price', data=df)
 plt.show()
+
+# We can see that on Longitude -122.2 there is some kind of expensive housing
+# area.
+plt.figure(figsize=(12, 8))
+sns.scatterplot(x='price', y='long', data=df)
+plt.show()
+
+# We can also see that at some areas are expensive housing areas as well.
+plt.figure(figsize=(12, 8))
+sns.scatterplot(x='price', y='lat', data=df)
+plt.show()
+
+# We can make a combination of Longitude and Latitude to discover expensive area
+plt.figure(figsize=(16, 9))
+sns.scatterplot(x='long', y='lat', data=df, hue='price')
+plt.show()
+
+# The following command drops the top 1% ( the most expensive houses )
+non_top_1_percent = df.sort_values('price', ascending=False).iloc[216:]
+
+# As you can see on the following plot properties next to the water seem to have
+# higher price
+plt.figure(figsize=(16, 9))
+sns.scatterplot(
+    x='long',
+    y='lat',
+    data=non_top_1_percent,
+    hue='price',
+    edgecolor=None,
+    alpha=0.2,
+    palette='RdYlGn'
+)
+plt.show()
+
+# As you can see on this box plot if you have a waterfront property it tends to
+# have higher value
+sns.boxplot(data=df, x='waterfront', y='price')
+plt.show()
