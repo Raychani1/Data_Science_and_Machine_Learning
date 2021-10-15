@@ -8,7 +8,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.metrics import mean_absolute_error, mean_squared_error, \
     explained_variance_score
-# from tensorflow.keras.models import load_model
 
 # Read the data to DataFrame
 df = pd.read_csv('data/kc_house_data.csv')
