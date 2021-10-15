@@ -6,7 +6,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
-# from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error, \
+    explained_variance_score
 # from tensorflow.keras.models import load_model
 
 # Read the data to DataFrame
@@ -27,14 +28,14 @@ print(description)
 # dropping them.
 plt.figure(figsize=(10, 6))
 sns.displot(df['price'])
-# plt.show()
+plt.show()
 
 # As you can see on the count plot some houses have > 7 bedrooms
 # ( some have 33 ), which is exactly the same scenario as with the very
 # expensive houses.
 plt.figure(figsize=(10, 6))
 sns.countplot(df['bedrooms'])
-# plt.show()
+plt.show()
 
 # We can look for correlation in the data. Since we are looking for factors that
 # are correlated with our label 'price', we can call the following command.
@@ -73,7 +74,7 @@ plt.show()
 non_top_1_percent = df.sort_values('price', ascending=False).iloc[216:]
 
 # As you can see on the following plot properties next to the water seem to have
-# higher price
+# higher price.
 plt.figure(figsize=(16, 9))
 sns.scatterplot(
     x='long',
@@ -87,7 +88,7 @@ sns.scatterplot(
 plt.show()
 
 # As you can see on this box plot if you have a waterfront property it tends to
-# have higher value
+# have higher value.
 sns.boxplot(data=df, x='waterfront', y='price')
 plt.show()
 
@@ -95,7 +96,7 @@ plt.show()
 df.drop('id', axis=1, inplace=True)
 
 # We can also convert the date which is currently a String to a DateTime Object
-# which will allow us execute further feature engineering
+# which will allow us execute further feature engineering.
 df['date'] = pd.to_datetime(df['date'])
 
 df['year'] = df['date'].apply(lambda date: date.year)
@@ -125,11 +126,11 @@ df.drop('zipcode', axis=1, inplace=True)
 # In other cases we could feature engineer this feature to two categories
 # 'Renovated' and 'Not Renovated', but since the not renovated houses have the
 # value 0 we don't really need to do this step, because the higher the value in
-# this column the higher the probability that it will have higher price
+# this column the higher the probability that it will have higher price.
 print(df['yr_renovated'].value_counts())
 
 # The same situation as with the Year of Renovation, values are ascending,
-# if there is no basement, then the value will be 0
+# if there is no basement, then the value will be 0.
 print(df['sqft_basement'].value_counts())
 
 # Separate the Label and the features
@@ -151,7 +152,7 @@ X_test = scaler.transform(X_test)
 model = Sequential()
 
 # Most of the time we want to have the number of neurons based on the number of
-# features we have
+# features we have.
 print(X_train.shape)  # We have 19 features
 
 # Hidden layers
@@ -174,3 +175,30 @@ model.fit(
     batch_size=128,
     epochs=400
 )
+
+# Once the training process is done and we have validation data results in the
+# history we can plot the changes and check for signs of overfitting.
+losses = pd.DataFrame(model.history.history)
+losses.plot()
+plt.show()
+
+predictions = model.predict(X_test)
+print(mean_absolute_error(y_true=y_test, y_pred=predictions))
+print(mean_squared_error(y_true=y_test, y_pred=predictions))
+print(explained_variance_score(y_true=y_test, y_pred=predictions))
+
+# The average price of a house is $500K our model is $100K off, so around 20%
+# off. We can check the prediction compared to the real value. The very
+# expensive houses are lowering the accuracy of our model.
+plt.figure(figsize=(16, 9))
+plt.scatter(x=y_test, y=predictions)
+plt.plot(y_test, y_test, 'r')
+plt.show()
+
+# Predict
+
+# Select the first house
+house = df.drop('price', axis=1).iloc[0]
+
+new_prediction = model.predict(scaler.transform(house.values.reshape(-1, 19)))
+print(new_prediction)
