@@ -164,3 +164,48 @@ df.fillna(value='Fill Value')
 
 # Common strategy is to fill the missing value with the mean value of the column
 df['A'].fillna(value=df['A'].mean())
+
+# Group by
+
+data = {
+    'Company': ['GOOG', 'GOOG', 'MSFT', 'MSFT', 'FB', 'FB'],
+    'Person': ['Sam', 'Charlie', 'Amy', 'Vanessa', 'Carl', 'Sarah'],
+    'Sale': [200, 120, 340, 124, 243, 350]
+}
+
+df = pd.DataFrame(data)
+
+# The groupby method creates a DataFrameGroupBy Object, and we can call
+# aggregate functions on this object
+by_comp = df.groupby(by='Company')
+
+# The mean function returns the average sale ( since that is the only numerical
+# column for which pandas is capable to calculate the mean value, and ignores
+# all string data )
+print(by_comp.mean())
+
+# The sum function returns the sum of sales values ( since that is the only
+# numerical column )
+print(by_comp.sum())
+
+# The std function returns the standard deviation of sales values ( since that
+# is the only numerical column )
+print(by_comp.std())
+
+# Since we get back a DataFrame we can use indexing on it
+print(by_comp.sum().loc['FB'])
+
+# We can also use it as a one liner
+print(df.groupby(by='Company').sum().loc['FB'])
+
+# The count method is also useful, because it returns the number of instances
+# of each column per Company ( The column we called group by on )
+print(df.groupby(by='Company').count())
+
+# The min ( max ) method returns the min ( max ) value for each column
+# ( Even for string values)
+print(df.groupby(by='Company').min())
+print(df.groupby(by='Company').max())
+
+# Also supports the describe method
+print(df.groupby(by='Company').describe())
