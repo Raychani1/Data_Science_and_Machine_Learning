@@ -312,3 +312,68 @@ print(left.join(right))
 # We can also specify the way we want to join DataFrames
 
 print(left.join(right, how='outer'))
+
+# Operations
+
+df = pd.DataFrame(
+    {
+        'col1': [1, 2, 3, 4],
+        'col2': [444, 555, 666, 444],
+        'col3': ['abc', 'def', 'ghi', 'xyz']
+    }
+)
+
+# To find a unique values in a given column we can use the unique method
+
+print(df['col2'].unique())
+
+# We can also get the number of unique values in a given column
+
+print(df['col2'].nunique())
+
+# We can also get the number of occurrences of each unique value in a column
+
+print(df['col2'].value_counts())
+
+
+def times2(x):
+    return x * 2
+
+
+print(df['col2'].apply(times2))
+
+# We can also apply lambda functions to columns
+
+print(df['col2'].apply(lambda x: x * 2))
+
+# Get the column names
+
+print(df.columns)
+
+# Get the index
+
+print(df.index)
+
+# Sort DataFrame based on column values
+
+print(df.sort_values(by='col2'))
+
+# Find NaN values in DataFrame ( it basically returns a DataFrame of boolean
+# values )
+
+print(df.isnull())
+
+# The pivot table
+
+data = {
+    'A': ['foo', 'foo', 'foo', 'bar', 'bar', 'bar'],
+    'B': ['one', 'one', 'two', 'two', 'one', 'one'],
+    'C': ['x', 'y', 'x', 'y', 'x', 'y'],
+    'D': [1, 3, 2, 5, 4, 1]
+}
+
+df = pd.DataFrame(data)
+
+pivot = df.pivot_table(values='D', index=['A', 'B'], columns=['C'])
+
+print(pivot)
