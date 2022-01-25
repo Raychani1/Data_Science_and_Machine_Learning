@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from numpy.random import randn
+from sqlalchemy import create_engine
 
 # Set the same seed to have the same output as in the tutorial
 np.random.seed(101)
@@ -377,3 +378,54 @@ df = pd.DataFrame(data)
 pivot = df.pivot_table(values='D', index=['A', 'B'], columns=['C'])
 
 print(pivot)
+
+# Data Input and Output
+
+# CSV
+
+# Read from CSV File
+csv_data = pd.read_csv('data/example')
+
+print(csv_data)
+
+# Write to CSV File
+csv_data.to_csv('output/my_output', index=False)
+
+new_csv_data = pd.read_csv('data/example')
+
+print(new_csv_data)
+
+# Excel Workbook
+
+# Read from Excel File
+excel_data = pd.read_excel('data/Excel_Sample.xlsx', sheet_name='Sheet1')
+
+print(excel_data)
+
+# Write to Excel File
+excel_data.to_excel(
+    'output/Excel_Sample_Output.xlsx',
+    sheet_name='New_Sheet',
+    index=False
+)
+
+# HTML
+
+# We needd to select the first element ( element with the index of 0 ) to get
+# the DataFrame which was created from an HTML Table
+data = pd.read_html(
+    'https://www.fdic.gov/resources/resolutions/bank-failures/failed-bank-list/'
+)[0]
+
+print(data)
+
+# SQL
+
+# This command creates a basic SQLite Engine that runs in memory
+engine = create_engine('sqlite:///:memory:')
+
+# Write to SQL Table
+data.to_sql('failed_banks', engine)
+
+# Read from SQL Table
+sqldf = pd.read_sql('failed_banks', engine)
