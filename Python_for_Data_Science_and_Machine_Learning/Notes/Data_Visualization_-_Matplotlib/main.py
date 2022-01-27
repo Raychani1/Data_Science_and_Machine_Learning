@@ -111,7 +111,7 @@ if __name__ == '__main__':
     # Legends
     fig = plt.figure(figsize=(16, 10), dpi=300)
 
-    ax = fig.add_axes([0.1, 0.1, 0.9, 0.9])
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 
     # Add legends for each plot
     ax.plot(x, x ** 2, label='X Squared')
@@ -120,10 +120,92 @@ if __name__ == '__main__':
     # Display the legends
     ax.legend(loc='best')
 
-    plt.tight_layout()
-
     plt.show()
 
     fig.savefig(
         os.path.join(os.getcwd(), 'output', 'my_figure_with_legend.jpg')
     )
+
+    # Plot Appearance
+
+    # Color
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    # We can specify the line color by simple color names like 'green' and
+    # 'blue' or by RGB HEX Code #FF8C00
+    ax.plot(x, y, color='#FF8C00')
+
+    plt.show()
+
+    # Line Width
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    # We can also specify the line width
+    ax.plot(x, y, color='purple', linewidth=2)
+
+    plt.show()
+
+    # Visibility
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    # We can also specify the Line Width
+    ax.plot(x, y, color='purple', linewidth=3, alpha=0.5)
+
+    plt.show()
+
+    # Line Style
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    # We can also specify the Line Style
+    ax.plot(x, y, color='purple', linewidth=3, linestyle='-.')
+
+    plt.show()
+
+    # Markers
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    # We can also add markers to our plot
+    ax.plot(
+        x,
+        y,
+        color='purple',
+        linewidth=2,
+        linestyle='-',
+        marker='o',
+        markersize=10,
+        markeredgewidth=2,
+        markerfacecolor='yellow',
+        markeredgecolor='green'
+    )
+
+    plt.show()
+
+    # Axis appearance
+
+    fig = plt.figure(figsize=(16, 10))
+
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
+    ax.plot(
+        x,
+        y,
+        color='purple',
+        linewidth=2,
+        linestyle='--',
+    )
+
+    # We can set limitations for our axis ranges
+    ax.set_xlim([0, 1])
+    ax.set_ylim([0, 2])
+
+    plt.show()
