@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -74,3 +75,55 @@ if __name__ == '__main__':
     axes2.set_title('Smaller Plot')
 
     plt.show()
+
+    # The subplots call adds the number of subplots to the canvas
+    fig, axes = plt.subplots(nrows=1, ncols=2)
+
+    # We can iterate through axes
+    # for current_ax in axes:
+    #     current_ax.plot(x, y)
+
+    # We can also index axes
+    axes[0].plot(x, y)
+    axes[0].set_title('First plot')
+
+    axes[1].plot(y, x)
+    axes[1].set_title('Second plot')
+
+    # Fix overlapping
+    plt.tight_layout()
+
+    plt.show()
+
+    # Figure Size
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(16, 10), dpi=300)
+
+    axes[0].plot(x, y)
+    axes[1].plot(y, x)
+
+    plt.tight_layout()
+
+    plt.show()
+
+    # Save figure
+    fig.savefig(os.path.join(os.getcwd(), 'output', 'my_figure.jpg'))
+
+    # Legends
+    fig = plt.figure(figsize=(16, 10), dpi=300)
+
+    ax = fig.add_axes([0.1, 0.1, 0.9, 0.9])
+
+    # Add legends for each plot
+    ax.plot(x, x ** 2, label='X Squared')
+    ax.plot(x, x ** 3, label='X Cubed')
+
+    # Display the legends
+    ax.legend(loc='best')
+
+    plt.tight_layout()
+
+    plt.show()
+
+    fig.savefig(
+        os.path.join(os.getcwd(), 'output', 'my_figure_with_legend.jpg')
+    )
