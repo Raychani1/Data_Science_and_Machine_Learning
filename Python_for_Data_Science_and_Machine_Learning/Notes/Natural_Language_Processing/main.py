@@ -5,7 +5,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import string
 from typing import List
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report
+from sklearn.ensemble import RandomForestClassifier
 
 if __name__ == '__main__':
 
@@ -146,3 +151,79 @@ if __name__ == '__main__':
     # we can check which are those words ( The index is from our Count Vector ).
     print(bow_transformer.get_feature_names_out()[4068], end='\n\n')
     print(bow_transformer.get_feature_names_out()[9554], end='\n\n')
+
+    # We transform all the messages
+    messages_bow = bow_transformer.transform(messages['message'])
+
+    print(f'Shape of the Sparse Matrix: {messages_bow.shape}', end='\n\n')
+
+    # We can check all the non-zero occurrences
+    print(messages_bow.nnz, end='\n\n')
+
+    # We can compare the number of non-zero elements to all the elements
+    sparsity = (
+            100.0 * messages_bow.nnz /
+            (messages_bow.shape[0] * messages_bow.shape[1])
+    )
+
+    print(f'Sparsity: {sparsity}', end='\n\n')
+
+    # For weights, we are going to use the Term Frequency - Inverse Document
+    # Frequency (TF-IDF)
+    tfidf_transformer = TfidfTransformer().fit(messages_bow)
+
+    # Transforming only single message
+    tfidf4 = tfidf_transformer.transform(bow4)
+
+    print(tfidf4, end='\n\n')
+
+    # We can check the document frequency of any word
+    print(
+        tfidf_transformer.idf_[bow_transformer.vocabulary_['university']],
+        end='\n\n'
+    )
+
+    # Transform every message
+    messages_tfidf = tfidf_transformer.transform(messages_bow)
+
+    # For our spam detector we are going to use the Multinomial Naive Bayes
+    # Algorithm
+    spam_detect_model = MultinomialNB().fit(messages_tfidf, messages['label'])
+
+    # Prediction for single message
+    print(
+        f"Real Label: {messages['label'][3]}\n"
+        f"Predicted Label: {spam_detect_model.predict(tfidf4)[0]}"
+    )
+
+    # Prediction for every message
+    all_pred = spam_detect_model.predict(messages_tfidf)
+
+    # We need to note that we are predicting on the same data set as the
+    # training data set. So the accuracy of our model is not precise.
+
+    # First we split the data to train and test set
+    msg_train, msg_test, label_train, label_test = train_test_split(
+        messages['message'], messages['label'], test_size=0.3
+    )
+
+    # Scikit-Learn supports Pipeline Features
+
+    # pipeline = Pipeline([
+    #     ('bow', CountVectorizer(analyzer=text_process)),
+    #     ('tfidf', TfidfTransformer()),
+    #     ('classifier', MultinomialNB())
+    # ])
+
+    # We can also use other types of Classifiers
+    pipeline = Pipeline([
+        ('bow', CountVectorizer(analyzer=text_process)),
+        ('tfidf', TfidfTransformer()),
+        ('classifier', RandomForestClassifier())
+    ])
+
+    pipeline.fit(msg_train, label_train)
+
+    predictions = pipeline.predict(msg_test)
+
+    print(classification_report(label_test, predictions), end='\n\n')
